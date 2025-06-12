@@ -2,7 +2,16 @@
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Beschikbare Auto's</h1>
 
-        @if ($featuredCar)
+        <div class="mb-8 flex justify-center">
+            <input
+                type="text"
+                placeholder="Zoek op merk, model, kenteken of kleur..."
+                class="w-full md:w-2/3 lg:w-1/2 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                wire:model.live="search"
+            >
+        </div>
+
+        @if ($featuredCar && empty($search))
             <div class="mb-10 p-6 bg-blue-100 rounded-lg shadow-xl border-2 border-blue-300 transform transition-all duration-300 hover:scale-101 animate-fade-in">
                 <h2 class="text-2xl font-bold text-blue-800 mb-4 text-center">Uitgelichte Auto!</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -34,7 +43,7 @@
         @endif
 
         @if ($cars->isEmpty() && !$featuredCar)
-            <p class="text-center text-gray-600 text-lg">Momenteel zijn er geen auto's beschikbaar.</p>
+            <p class="text-center text-gray-600 text-lg">Momenteel zijn er geen auto's beschikbaar die voldoen aan de zoekcriteria.</p>
         @else
             <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Overige Aanbiedingen</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

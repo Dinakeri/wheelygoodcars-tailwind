@@ -11,15 +11,16 @@ class PublicCarList extends Component
 {
     use WithPagination;
 
+    public $search = '';
+
     public function render()
     {
-
         $allAvailableCars = Car::whereNull('sold_at')->get();
 
         $featuredCar = null;
         $excludedCarIds = [];
 
-        if ($allAvailableCars->isNotEmpty()) {
+        if (empty($this->search) && $allAvailableCars->isNotEmpty()) {
             $featuredCar = $allAvailableCars->random();
             $excludedCarIds[] = $featuredCar->id;
         }
@@ -27,6 +28,17 @@ class PublicCarList extends Component
         $carsQuery = Car::whereNull('sold_at')
                         ->whereNotIn('id', $excludedCarIds);
 
+        if (!empty($this->search)) {
+            $searchTerm = '%' . $this->search . '%';
+            $carsQuery->where(function ($query) use ($searchTerm) {
+                $query->where('brand', 'like', $searchTerm)
+                      ->orWhere('model', 'like', $searchTerm)
+                      ->orWhere('license_plate', 'like', $searchTerm)
+                      ->orWhere('color', 'like', $searchTerm);
+            });
+
+            $this->resetPage();
+        }
 
         $paginatedCars = $carsQuery->paginate(12);
 
@@ -35,4 +47,10 @@ class PublicCarList extends Component
             'cars' => $paginatedCars,
         ]);
     }
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
 }
+
