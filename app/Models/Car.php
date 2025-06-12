@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 class Car extends Model
 {
@@ -40,8 +41,21 @@ class Car extends Model
         'views' => 'integer',
     ];
 
+    protected $appends = ['is_sold'];
+
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getIsSoldAttribute(): bool
+    {
+        return $this->sold_at !== null;
+    }
+
+    public function setIsSoldAttribute(bool $value)
+    {
+        $this->attributes['sold_at'] = $value ? Carbon::now() : null;
     }
 }
