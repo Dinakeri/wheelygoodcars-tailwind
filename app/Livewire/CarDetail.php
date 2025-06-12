@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Car;
+use Carbon\Carbon;
 
 class CarDetail extends Component
 {
@@ -13,6 +14,7 @@ class CarDetail extends Component
     {
         $this->car = $car;
 
+        $this->car->increment('views');
     }
 
     public function render()
