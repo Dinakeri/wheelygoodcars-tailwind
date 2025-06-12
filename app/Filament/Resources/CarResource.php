@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 
-
 class CarResource extends Resource
 {
     protected static ?string $model = Car::class;
@@ -129,6 +128,14 @@ class CarResource extends Resource
                                 ->nullable()
                                 ->helperText('Hoofdkleur van de auto.'),
 
+
+                            Forms\Components\FileUpload::make('image')
+                                ->label('Auto Afbeelding')
+                                ->image()
+                                ->directory('car-images')
+                                ->nullable()
+                                ->helperText('Upload een duidelijke foto van de auto.'),
+
                             Forms\Components\Hidden::make('user_id')
                                 ->default(fn () => Auth::id()),
 
@@ -142,7 +149,6 @@ class CarResource extends Resource
                 ->submitAction(new HtmlString('<button type="submit" class="filament-button filament-button-size-md filament-button-color-primary filament-button-labeled-icon inline-flex items-center justify-center gap-1 font-semibold rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset min-h-[2.5rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:ring-offset-primary-600 filament-footer-action-button">Aanbod indienen</button>'))
             ]);
     }
-
 
     public static function table(Table $table): Table
     {
@@ -201,13 +207,10 @@ class CarResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-
+                //
             ])
             ->actions([
-
                 Tables\Actions\EditAction::make(),
-
-
                 Action::make('update_price_status')
                     ->label('Prijs/Status Aanpassen')
                     ->icon('heroicon-o-currency-euro')
@@ -237,7 +240,6 @@ class CarResource extends Resource
                     })
                     ->modalSubmitActionLabel('Opslaan')
                     ->modalCancelActionLabel('Annuleren'),
-
 
                 Tables\Actions\DeleteAction::make(),
             ])

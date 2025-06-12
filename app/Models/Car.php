@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Carbon\Carbon;
 
 class Car extends Model
 {
@@ -25,36 +23,25 @@ class Car extends Model
         'weight',
         'color',
         'image',
-        'sold_at',
+        'is_sold',
         'views',
+        'sold_at',
     ];
 
     protected $casts = [
+        'production_year' => 'integer',
+        'price' => 'integer',
+        'mileage' => 'integer',
+        'seats' => 'integer',
+        'doors' => 'integer',
+        'weight' => 'integer',
+        'is_sold' => 'boolean',
         'sold_at' => 'datetime',
+        'views' => 'integer',
     ];
-
-
-    protected $appends = ['is_sold'];
-
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-
-    public function tags(): BelongsToMany
-    {
-        return $this->belongsToMany(Tag::class);
-    }
-
-    public function getIsSoldAttribute(): bool
-    {
-        return $this->sold_at !== null;
-    }
-
-    public function setIsSoldAttribute(bool $value)
-    {
-        $this->attributes['sold_at'] = $value ? Carbon::now() : null;
     }
 }
